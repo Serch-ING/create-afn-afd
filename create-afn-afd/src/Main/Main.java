@@ -6,7 +6,9 @@
 package Main;
 
 import Automatas.AFN;
+import Graficar.CrearArchivo;
 import Regex.Convertidor;
+import Regex.Test;
 import Thompson.Automata;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
@@ -19,6 +21,7 @@ public class Main extends javax.swing.JFrame {
 
     public static String EPSILON = "ε";
     public static char EPSILON_CHAR = EPSILON.charAt(0);
+    Automata automata = null;
     
     /**
      * Creates new form Main
@@ -36,18 +39,13 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         ERcuerpo = new javax.swing.JTextField();
+        cadenaPrueba = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
 
         jButton1.setText("Guardar ER");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -59,8 +57,15 @@ public class Main extends javax.swing.JFrame {
         jButton2.setText("Abrir File");
 
         jButton3.setText("Test");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
 
         ERcuerpo.setText("jTextField1");
+
+        cadenaPrueba.setText("jTextField1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -69,20 +74,19 @@ public class Main extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(258, 258, 258)
-                        .addComponent(jButton3))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(62, 62, 62)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(ERcuerpo, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(201, 201, 201)
-                                .addComponent(jButton2)))))
-                .addContainerGap(101, Short.MAX_VALUE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(cadenaPrueba, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jButton1)
+                                    .addGap(201, 201, 201)
+                                    .addComponent(jButton2)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(211, 211, 211)
+                        .addComponent(jButton3)))
+                .addContainerGap(229, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,11 +97,11 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
+                .addComponent(cadenaPrueba, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
                 .addComponent(jButton3)
-                .addGap(26, 26, 26))
+                .addGap(90, 90, 90))
         );
 
         pack();
@@ -116,8 +120,10 @@ public class Main extends javax.swing.JFrame {
             String regex = convertir.getPostFijo(er);
             AFN afn = new AFN(regex);
             afn.construir();
-            Automata temp = afn.getAfn();
-            System.out.println(temp.toString());
+            automata = afn.getAfn();
+            CrearArchivo crear = new CrearArchivo("AFN.dot","AFN",automata);
+            crear.crearImagen();
+            System.out.println(automata.toString());
             
         }catch(Exception e)
         {
@@ -125,6 +131,20 @@ public class Main extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jButton1MouseClicked
+
+    /*
+    * EVENTO QUE SE EJECUTARA CON CADA CLICK EN EL BOTON DE PROBAR CADENA
+    */
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        if(automata != null){
+            String cadena = cadenaPrueba.getText();
+            Test test = new Test(automata,cadena);
+            boolean resultado = test.simular();
+            if(resultado) JOptionPane.showMessageDialog(null, "Cadena aceptada");
+            else JOptionPane.showMessageDialog(null, "Cadena no aceptada");
+        }
+        else JOptionPane.showMessageDialog(null, "Primero ingrese una expresion regular");
+    }//GEN-LAST:event_jButton3MouseClicked
 
     
     
@@ -167,10 +187,9 @@ public class Main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField ERcuerpo;
+    private javax.swing.JTextField cadenaPrueba;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea2;
     // End of variables declaration//GEN-END:variables
 }
