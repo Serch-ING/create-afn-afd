@@ -5,12 +5,15 @@
  */
 package Main;
 
+import Arbol.Arbol;
+import Automatas.AFD;
 import Automatas.AFN;
 import Graficar.CrearArchivo;
 import Regex.Convertidor;
 import Regex.Test;
 import Thompson.Automata;
 import java.util.HashMap;
+import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 /**
@@ -44,9 +47,18 @@ public class Main extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         ERcuerpo = new javax.swing.JTextField();
         cadenaPrueba = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        cuerpoGraphiz = new javax.swing.JTextArea();
+        j1 = new javax.swing.JLabel();
+        j2 = new javax.swing.JLabel();
+        tipoAutomata = new javax.swing.JLabel();
+        expresionRegular = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(33, 150, 243));
+        setForeground(new java.awt.Color(255, 51, 51));
 
+        jButton1.setBackground(new java.awt.Color(255, 153, 102));
         jButton1.setText("Guardar ER");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -54,8 +66,10 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setBackground(new java.awt.Color(255, 153, 102));
         jButton2.setText("Abrir File");
 
+        jButton3.setBackground(new java.awt.Color(255, 153, 102));
         jButton3.setText("Test");
         jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -63,9 +77,23 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        ERcuerpo.setText("jTextField1");
+        ERcuerpo.setText("a+");
 
-        cadenaPrueba.setText("jTextField1");
+        cadenaPrueba.setText("a");
+
+        cuerpoGraphiz.setColumns(20);
+        cuerpoGraphiz.setRows(5);
+        jScrollPane1.setViewportView(cuerpoGraphiz);
+
+        j1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        j1.setText("Tipo Automata");
+
+        j2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        j2.setText("ER");
+
+        tipoAutomata.setText("jLabel1");
+
+        expresionRegular.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -82,26 +110,49 @@ public class Main extends javax.swing.JFrame {
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                     .addComponent(jButton1)
                                     .addGap(201, 201, 201)
-                                    .addComponent(jButton2)))))
+                                    .addComponent(jButton2))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(j1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(j2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(18, 18, 18)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(tipoAutomata, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(expresionRegular, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(211, 211, 211)
                         .addComponent(jButton3)))
-                .addContainerGap(229, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(59, 59, 59)
-                .addComponent(ERcuerpo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
-                .addComponent(cadenaPrueba, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(jButton3)
-                .addGap(90, 90, 90))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ERcuerpo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(jButton2))
+                        .addGap(61, 61, 61)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(j1)
+                            .addComponent(tipoAutomata))
+                        .addGap(37, 37, 37)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(j2)
+                            .addComponent(expresionRegular))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cadenaPrueba, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(jButton3)
+                        .addGap(90, 90, 90))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(67, Short.MAX_VALUE))))
         );
 
         pack();
@@ -118,12 +169,37 @@ public class Main extends javax.swing.JFrame {
         {
             Convertidor convertir = new Convertidor();
             String regex = convertir.getPostFijo(er);
-            AFN afn = new AFN(regex);
-            afn.construir();
-            automata = afn.getAfn();
-            CrearArchivo crear = new CrearArchivo("AFN.dot","AFN",automata);
+            String tipo;
+            
+            AFD afd = new AFD();
+            String regexextend = regex + "#.";
+            System.out.println(regex);
+            Arbol arbol = new Arbol();
+            arbol.buildTree(regexextend);
+            afd.creacionDirecta(arbol);
+
+            Boolean flag = afd.creacionDirecta(arbol);
+            if(flag){
+                Automata afdD = afd.getAfd();
+                automata = afdD;
+                tipo = "AFD";
+            }
+            else{
+                AFN afn = new AFN(regex);
+                afn.construir();
+                automata = afn.getAfn();
+                tipo = "AFDN";
+            }
+            
+            
+            CrearArchivo crear = new CrearArchivo(tipo + ".dot",tipo,automata);
             crear.crearImagen();
-            System.out.println(automata.toString());
+            cuerpoGraphiz.setText(crear.getSalida());
+            
+            tipoAutomata.setText(tipo);
+            expresionRegular.setText(er);
+            
+            //System.out.println(afdD.toString());
             
         }catch(Exception e)
         {
@@ -132,6 +208,8 @@ public class Main extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButton1MouseClicked
 
+ 
+    
     /*
     * EVENTO QUE SE EJECUTARA CON CADA CLICK EN EL BOTON DE PROBAR CADENA
     */
@@ -188,8 +266,14 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField ERcuerpo;
     private javax.swing.JTextField cadenaPrueba;
+    private javax.swing.JTextArea cuerpoGraphiz;
+    private javax.swing.JLabel expresionRegular;
+    private javax.swing.JLabel j1;
+    private javax.swing.JLabel j2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel tipoAutomata;
     // End of variables declaration//GEN-END:variables
 }

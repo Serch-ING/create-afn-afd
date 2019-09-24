@@ -22,7 +22,7 @@ public class CrearArchivo {
     String direccion;
     String tipo;
     Automata automata;
-
+    String salida;
     
     /*
     * COSNTRUCTOR DE LA CLASE
@@ -65,6 +65,7 @@ public class CrearArchivo {
         texto += "}";
         File file = new File(path + "/Imagenes/" + direccion);
         FileWriter out;
+        salida = texto;
         try{
             out = new FileWriter(file);
             out.write(texto);
@@ -86,6 +87,18 @@ public class CrearArchivo {
                 if (line == null) { break; }
                 System.out.println(line);
             }
+            
+            comando = path + "/Imagenes/" + tipo + ".png";
+             pbuilder = new ProcessBuilder("cmd.exe", "/c", comando);
+            pbuilder.redirectErrorStream( true );
+            //Ejecuta el proceso
+            p = pbuilder.start();
+            r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while (true) {
+                line = r.readLine();
+                if (line == null) { break; }
+                System.out.println(line);
+            }
 
         }
         catch (IOException e)
@@ -93,4 +106,11 @@ public class CrearArchivo {
            System.out.println("Erro crear imagen " +  e.getMessage());
         }
     }
+
+    //---------------------------------------- OBTENEMOS EL TEXTO PARA EL DOT --------------------------
+    public String getSalida() {
+        return salida;
+    }
+
+    
 }

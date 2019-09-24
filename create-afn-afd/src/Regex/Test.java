@@ -38,26 +38,18 @@ public class Test {
         Estado inicial = automata.getInicial();
         ArrayList<Estado> estados = automata.getEstados();
         ArrayList<Estado> aceptacion = new ArrayList(automata.getAceptacion());
-        HashSet<Estado> conjunto2 = new HashSet();
-        HashSet<Estado> conjunto = eClosure(inicial,conjunto2);
+        HashSet<Estado> conjunto = eClosure(inicial);
         for(Character c: cadena.toCharArray()){
-            conjunto = move(conjunto,c.toString(),conjunto2);
+            conjunto = move(conjunto,c.toString());
             
             HashSet<Estado> temp = new HashSet();
             Iterator<Estado> iter = conjunto.iterator();           
             while(iter.hasNext()){
                 Estado siguiente = iter.next();
-                temp = eClosure(siguiente,conjunto2);
+                temp = eClosure(siguiente);
             }
             conjunto = temp;
         }
-        
-      
-        Iterator<Estado> iter = conjunto2.iterator();           
-            while(iter.hasNext()){
-                Estado siguiente = iter.next();
-                System.out.println("A:" + siguiente.getId());
-            }
         boolean res = false;
         for(Estado estado : aceptacion){
             if(conjunto.contains(estado)) res = true;
@@ -66,7 +58,7 @@ public class Test {
     }
     
     
-    public HashSet<Estado> eClosure(Estado estado,HashSet<Estado> conjunto2){
+    public HashSet<Estado> eClosure(Estado estado){
         Stack<Estado> pila = new Stack();
         Estado actual = estado;
         actual.getTransiciones();
@@ -78,7 +70,6 @@ public class Test {
             for(Transicion t : ((ArrayList<Transicion>)actual.getTransiciones())){
                 if(t.getSimbolo().equals(Main.EPSILON) && !resultado.contains(t.getFin())){
                     resultado.add(t.getFin());
-                    conjunto2.add(t.getFin());
                     pila.push(t.getFin());
                 }
             }
@@ -88,7 +79,7 @@ public class Test {
         return resultado;
     }
     
-    public HashSet<Estado> move (HashSet<Estado> estados, String simbolo,HashSet<Estado> conjunto2){
+    public HashSet<Estado> move (HashSet<Estado> estados, String simbolo){
         HashSet<Estado> alcanzados = new HashSet();
         Iterator<Estado> iterador = estados.iterator();
         while(iterador.hasNext()){
@@ -97,10 +88,7 @@ public class Test {
                 Estado siguiente = t.getFin();                
                 String sim = (String)t.getSimbolo();
                 if(sim.equals(simbolo)) {
-                   
-                    alcanzados.add(siguiente);
-                    conjunto2.add(siguiente);
-                    
+                    alcanzados.add(siguiente);                    
                 }
             }
         }

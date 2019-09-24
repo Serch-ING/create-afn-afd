@@ -47,6 +47,14 @@ public class AFN<T> {
                         this.afn = concatenar;
                         break;
                         
+                    case '|':
+                        Automata op1Or = (Automata)pila.pop();
+                        Automata op2Or = (Automata)pila.pop();
+                        Automata OR = union(op1Or,op2Or);
+                        pila.push(OR);
+                        this.afn = OR;
+                        break;
+                     
                     default:
                         Automata simple = automataSimple((T)Character.toString(c));
                         pila.push(simple);
@@ -174,6 +182,59 @@ public class AFN<T> {
         return a;
     }
 
+    /*
+    * METODO QUE CONSTRUYE UN AUTOMATA  (|)
+    * @param {automata} automata a agregarle la union
+    * @return Automata
+    */
+     public Automata union(Automata AFN1, Automata AFN2){
+        Automata afnunion = new Automata();
+        Estado inicioNuevo = new Estado(0);
+        inicioNuevo.setTransiciones(new Transicion(inicioNuevo,AFN2.getInicial(),Main.EPSILON));
+
+        afnunion.addEstados(inicioNuevo);
+        afnunion.setInicial(inicioNuevo);
+        int i=0;//llevar el contador del identificador de estados
+        //agregar los estados del segundo automata
+        for (i=0; i < AFN1.getEstados().size(); i++) {
+            Estado tmp = (Estado) AFN1.getEstados().get(i);
+            tmp.setId(i + 1);
+            afnunion.addEstados(tmp);
+        }
+        //agregar los estados del primer automata
+        for (int j=0; j < AFN2.getEstados().size(); j++) {
+            Estado tmp = (Estado) AFN2.getEstados().get(j);
+            tmp.setId(i + 1);
+            afnunion.addEstados(tmp);
+            i++;
+        }
+        
+        Estado nuevoFin = new Estado(AFN1.getEstados().size() +AFN2.getEstados().size()+ 1);
+        afnunion.addEstados(nuevoFin);
+        afnunion.addEstadoAceptacion(nuevoFin);
+        
+       
+        Estado anteriorInicio = AFN1.getInicial();
+        ArrayList<Estado> anteriorFin    = AFN1.getAceptacion();
+        ArrayList<Estado> anteriorFin2    = AFN2.getAceptacion();
+        
+        inicioNuevo.getTransiciones().add(new Transicion(inicioNuevo, anteriorInicio, Main.EPSILON));
+        
+        for (int k =0; k<anteriorFin.size();k++)
+            anteriorFin.get(k).getTransiciones().add(new Transicion(anteriorFin.get(k), nuevoFin, Main.EPSILON));
+        for (int k =0; k<anteriorFin.size();k++)
+            anteriorFin2.get(k).getTransiciones().add(new Transicion(anteriorFin2.get(k),nuevoFin,Main.EPSILON));
+        
+        HashSet alfabeto = new HashSet();
+        alfabeto.addAll(AFN1.getSimbolos());
+        alfabeto.addAll(AFN2.getSimbolos());
+        afnunion.setSimbolos(alfabeto);
+        afnunion.setLenguaje(AFN1.getLenguaje()+" " + AFN2.getLenguaje()); 
+        return afnunion;
+    }
+    
+    
+    
     
     /*
     * GET DEL ATRIBUTO AUTOMATA AFN

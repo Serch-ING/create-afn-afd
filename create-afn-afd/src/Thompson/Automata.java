@@ -112,6 +112,9 @@ public class Automata {
         return estados;
     }
     
+    public Estado getEstado(int index){
+        return estados.get(index);
+    }
     
     
     
