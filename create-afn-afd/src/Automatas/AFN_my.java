@@ -11,17 +11,18 @@ import Thompson.Estado;
 import Thompson.Transicion;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Stack;
-
+import java.util.Queue;
 /**
  *
  * @author Carlos
  */
-public class AFN<T> {
+public class AFN_my<T> {
     private Automata afn;
     private String regex;
 
-    public AFN(String regex) {
+    public AFN_my(String regex) {
         this.regex = regex;
     }
     
@@ -30,35 +31,41 @@ public class AFN<T> {
     */
     public void construir(){
         try{
-            Stack pila = new Stack();
+            //Stack pila = new Stack();
+            Queue<Automata> Cola = new LinkedList<Automata>();
             for(Character c : this.regex.toCharArray()){
             	System.out.println(c);
                 switch(c){
                     case '*':
-                        Automata kleene = cerraduraKleene((Automata)pila.pop()); 
-                        pila.push(kleene);
+                        Automata kleene = cerraduraKleene((Automata)Cola.peek());
+                        Cola.remove();
+                        Cola.add(kleene);
                         this.afn = kleene;
                         break;
                     
                     case '.':
-                        Automata op1 = (Automata)pila.pop();
-                        Automata op2 = (Automata)pila.pop();
+                        Automata op1 = (Automata)Cola.peek();
+                        Cola.remove();
+                        Automata op2 = (Automata)Cola.peek();
+                        Cola.remove();
                         Automata concatenar = concatenacion(op1,op2);
-                        pila.push(concatenar);
+                        Cola.add(concatenar);
                         this.afn = concatenar;
                         break;
                         
                     case '|':
-                        Automata op1Or = (Automata)pila.pop();
-                        Automata op2Or = (Automata)pila.pop();
+                        Automata op1Or = (Automata)Cola.peek();
+                        Cola.remove();
+                        Automata op2Or = (Automata)Cola.peek();
+                        Cola.remove();
                         Automata OR = union(op1Or,op2Or);
-                        pila.push(OR);
+                        Cola.add(OR);
                         this.afn = OR;
                         break;
                      
                     default:
                         Automata simple = automataSimple((T)Character.toString(c));
-                        pila.push(simple);
+                        Cola.add(simple);
                         this.afn = simple;
                         break;
                 }

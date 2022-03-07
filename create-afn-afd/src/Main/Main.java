@@ -8,6 +8,7 @@ package Main;
 import Arbol.Arbol;
 import Automatas.AFD;
 import Automatas.AFN;
+import Automatas.AFN_my;
 import Graficar.CrearArchivo;
 import Regex.Convertidor;
 import Regex.Test;
@@ -167,29 +168,16 @@ public class Main extends javax.swing.JFrame {
         String er = ERcuerpo.getText();
         try
         {
-            Convertidor convertir = new Convertidor();
-            String regex = convertir.getPostFijo(er);
-            String tipo;
+         
+     
+            System.out.println(er);
+            AFN_my afn = new AFN_my(er);
+            //AFN afn = new AFN(er);
+            afn.construir();
+            automata = afn.getAfn();
+            System.out.println(automata);
+            String tipo = "AFDN";
             
-            AFD afd = new AFD();
-            String regexextend = regex + "#.";
-            System.out.println(regex);
-            Arbol arbol = new Arbol();
-            arbol.buildTree(regexextend);
-            afd.creacionDirecta(arbol);
-
-            Boolean flag = afd.creacionDirecta(arbol);
-            if(flag){
-                Automata afdD = afd.getAfd();
-                automata = afdD;
-                tipo = "AFD";
-            }
-            else{
-                AFN afn = new AFN(regex);
-                afn.construir();
-                automata = afn.getAfn();
-                tipo = "AFDN";
-            }
             
             
             CrearArchivo crear = new CrearArchivo(tipo + ".dot",tipo,automata);
