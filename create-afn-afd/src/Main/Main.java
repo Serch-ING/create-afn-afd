@@ -9,7 +9,6 @@ package Main;
 import Automatas.AFN;
 import Automatas.AFN_my;
 import Graficar.CrearArchivo;
-import Regex.Test;
 import Thompson.Automata;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -202,10 +201,8 @@ public class Main extends javax.swing.JFrame {
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         if(automata != null){
             String cadena = cadenaPrueba.getText();
-            Test test = new Test(automata,cadena);
-            boolean resultado = test.simular();
-            if(resultado) JOptionPane.showMessageDialog(null, "Cadena aceptada");
-            else JOptionPane.showMessageDialog(null, "Cadena no aceptada");
+
+
         }
         else JOptionPane.showMessageDialog(null, "Primero ingrese una expresion regular");
     }//GEN-LAST:event_jButton3MouseClicked
