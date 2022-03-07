@@ -5,8 +5,7 @@
  */
 package Main;
 
-import Arbol.Arbol;
-import Automatas.AFD;
+
 import Automatas.AFN;
 import Automatas.AFN_my;
 import Graficar.CrearArchivo;

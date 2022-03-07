@@ -79,16 +79,6 @@ public class AFN_my<T> {
         }
     }
     
-    
-    
-    /*
-    *METODO QUE CONSTRUYE UN AUTOMATA DE CONCATENACION
-    @param {op1} Automata izq
-    @param {op2} Autoamta der
-    @return Automata
-    */
-    
-    
     public Automata concatenacion(Automata op1, Automata op2){
         Automata a = new Automata();
         int i = 0;
@@ -122,14 +112,7 @@ public class AFN_my<T> {
         
         return a;
     }
-    
-    
-    /*
-    * METODO QUE CONSTRUYE UN AUTOMATA Simple
-    * @param {automata} 
-    * @return Automata
-    */
-    
+
     public Automata automataSimple(T simbolo){
         Automata a = new Automata();
         
@@ -149,13 +132,7 @@ public class AFN_my<T> {
         
         return a;
     }
-    
-    /*
-    * METODO QUE CONSTRUYE UN AUTOMATA CON CERRADURA DE KLEENE (*)
-    * @param {automata} automata a agregarle la cerradura
-    * @return Automata
-    */
-    
+
     public Automata cerraduraKleene(Automata automata){
         Automata a = new Automata();
         
@@ -190,12 +167,7 @@ public class AFN_my<T> {
         return a;
     }
 
-    /*
-    * METODO QUE CONSTRUYE UN AUTOMATA  (|)
-    * @param {automata} automata a agregarle la union
-    * @return Automata
-    */
-     public Automata union(Automata AFN1, Automata AFN2){
+    public Automata union(Automata AFN1, Automata AFN2){
         Automata afnunion = new Automata();
         Estado inicioNuevo = new Estado(0);
         inicioNuevo.setTransiciones(new Transicion(inicioNuevo,AFN2.getInicial(),Main.EPSILON));
