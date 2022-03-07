@@ -9,7 +9,6 @@ package Main;
 import Automatas.AFN;
 import Automatas.AFN_my;
 import Graficar.CrearArchivo;
-import Regex.Convertidor;
 import Regex.Test;
 import Thompson.Automata;
 import java.util.HashMap;
